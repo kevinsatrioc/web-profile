@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <canvas id="bg-anim"></canvas>
+    <div class="deco-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="sparkle"></div>
+    </div>
+    <div class="frame-916">
+      <div class="container">
+          <img src="sgt.jpg" alt="Foto Profil" class="profile-img">
+          <h1 class="nama">Kevin Satrio Cahyono</h1>
+          <div class="badge">Tempas</div>
+          <p class="desc">Halo! Saya adalah Kevin biasa dipanggil Keshi.</p>
+          <div class="contact">
+              <p>Email: <a href="mailto:email@domain.com">email@domain.com</a></p>
+              <p>Telepon: 0812-3456-7890</p>
+          </div>
+          <div class="social">
+              <a href="https://www.instagram.com/kipinstrrr/" class="btn-sosmed btn-ig" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+              <a href="www.linkedin.com/in/kevin-satrio-c-17a41b395" class="btn-sosmed btn-li" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+              <a href="https://github.com/kevinsatrioc" class="btn-sosmed btn-gh" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+              <a href="https://discordapp.com/users/sugarkes" class="btn-sosmed btn-dc" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+          </div>
+      </div>
+    </div>
+    <script>
+      const canvas = document.getElementById('bg-anim');
+      const ctx = canvas.getContext('2d');
+      let w = window.innerWidth;
+      let h = window.innerHeight;
+      function resizeParticleCanvas() {
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+      }
+      resizeParticleCanvas();
+      window.addEventListener('resize', resizeParticleCanvas);
+      // Particle model
+      const COLORS = [
+        '#324b6b', // biru navy gelap
+        '#452672', // ungu gelap
+        '#282c37', // abu gelap
+        '#39b7e3', // cyan neon
+        '#aad6ff', // biru pastel
+        '#8c9bc8', // biru abu terang
+        '#4f50a3', // ungu biru
+        '#181c22', // hampir hitam
+        '#d9e3ee'  // aksen putih biru muda
+      ];
+      function randomColor() { return COLORS[Math.floor(Math.random()*COLORS.length)]; }
+      function randomBetween(a,b){return a+Math.random()*(b-a)}
+      const DOT_NUM = 160;
+      const PARTICLES = [];
+      for(let i=0; i<DOT_NUM; i++) {
+        let angle = Math.random()*2*Math.PI;
+        PARTICLES.push({
+          x: randomBetween(0, w), y: randomBetween(0, h),
+          r: randomBetween(3.5, 9.5), v: randomBetween(.6, 3.2), d: angle, c: randomColor(), o: randomBetween(0.19,0.66)
+        });
+      }
+      function stepParticles() {
+        ctx.clearRect(0,0,w,h);
+        for(let p of PARTICLES){
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 2*Math.PI);
+          ctx.fillStyle = p.c;
+          ctx.globalAlpha = p.o;
+          ctx.shadowColor = p.c;
+          ctx.shadowBlur = 11;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          // Gerak
+          p.x += Math.cos(p.d)*p.v;
+          p.y += Math.sin(p.d)*p.v;
+          // looping tepi
+          if(p.x<-15) p.x=w+10;
+          if(p.x>w+15) p.x=-10;
+          if(p.y<-15) p.y=h+10;
+          if(p.y>h+15) p.y=-10;
+        }
+        requestAnimationFrame(stepParticles);
+      }
+      stepParticles();
+    </script> 
+</body>
+</html>
